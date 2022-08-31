@@ -10,13 +10,13 @@ import {
     Model,
     Table,
   } from 'sequelize-typescript';
-  import { Base } from './base.model';
+  import  Base  from './base.model';
   import * as bcrypt from 'bcrypt';
   
   @Table(
     {tableName: 'role'}
   )
-  export class Role extends Base {
+  export default class Role extends Base {
     @Column({
       allowNull: false,
       type: DataType.STRING(64),

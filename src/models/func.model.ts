@@ -11,11 +11,11 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { Base } from './base.model';
+import  Base  from './base.model';
 import * as bcrypt from 'bcrypt';
 
 @Table({ tableName: 'func' })
-export class Func extends Base {
+export default class Func extends Base {
 //   readonly hasService : true
 
   @Column({

@@ -3,10 +3,10 @@ import {
     DataType,
     Table,
   } from 'sequelize-typescript';
-  import { Base } from './base.model';
+  import  Base  from './base.model';
   
   @Table({ tableName: 'roleFunc' })
-  export class RoleFunc extends Base {
+  export default class RoleFunc extends Base {
     @Column({
       allowNull: false,
       type: DataType.BIGINT,

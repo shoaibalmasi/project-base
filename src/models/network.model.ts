@@ -10,13 +10,13 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { Base } from './base.model';
+import  Base  from './base.model';
 import * as bcrypt from 'bcrypt';
 
 @Table(
   {tableName: 'network'}
 )
-export class Network extends Base {
+export  default class Network extends Base {
   @Column({
     allowNull: false,
     type: DataType.STRING(64),

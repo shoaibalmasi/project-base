@@ -17,8 +17,9 @@
 
 
 import { Sequelize } from 'sequelize-typescript';
-import * as db from '../src/models/index';
-console.log({aaa:__dirname})
+import * as path from 'path';
+// import * as db from '../src/models/index';
+console.log({aaa:path.resolve(__dirname ,'../src/models')})
  const databaseProviders = [
   {
     provide: 'SEQUELIZE',
@@ -30,9 +31,9 @@ console.log({aaa:__dirname})
             username: 'postgres',
             password: 'shoaib382',
             database: 'project-base',
-            models: [__dirname + './src/models']
+            // models: [User]
       });
-    //   sequelize.addModels();
+       sequelize.addModels([path.resolve(__dirname ,'../src/models')]);
       await sequelize.sync();
       return sequelize;
     },
