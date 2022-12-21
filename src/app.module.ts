@@ -1,20 +1,10 @@
 import { Module } from '@nestjs/common';
-import databaseProviders from 'config/db.config';
-import { SequelizeModule , SequelizeModuleOptions} from '@nestjs/sequelize';
+import { JwtModule } from '@nestjs/jwt';
+import { RedisCacheModule } from './api/redis-cache/redis-cache.module';
 import { UserModule } from './api/user/user.module';
-import { Sequelize } from 'sequelize-typescript';
-// import { Func } from './models/func.model';
-
+import jwtConfig from 'config/jwtConfig';
 
 @Module({
-  imports: [
-    
-    UserModule,
-    
-  ],
-  providers: [
-    ...databaseProviders
-  ]
-  
+  imports: [UserModule, RedisCacheModule],
 })
 export class AppModule {}
