@@ -1,0 +1,9 @@
+network:
+    ethernets:
+        id0:
+            dhcp4: true
+            nameservers:
+                addresses: [185.51.200.2,178.22.122.100]
+            match:
+                name: eth*
+    version: 2

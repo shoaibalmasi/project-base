@@ -1,0 +1,89 @@
+import {
+  Body,
+  Controller,
+  Get,
+  ParseIntPipe,
+  Post,
+  Put,
+  Query,
+  UsePipes,
+  UseGuards,
+  Delete,
+} from '@nestjs/common';
+import * as tempDto from 'src/dto/temp.dto';
+import { TempService } from './temp.service';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard'
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { RolesGuard } from 'src/common/guards/role.guard';
+import  * as db from 'src/models';
+import { JoiPipe } from 'nestjs-joi';
+import { payloadInterface } from '../auth/interfaces/auth.inteface';
+import { Payload } from 'src/common/decorator/payload.decorator';
+
+
+@Controller('temp')
+@ApiTags("Temp")
+@UseGuards(JwtAuthGuard, RolesGuard)
+export class TempController {
+  constructor(private TempService: TempService) {}
+
+ 
+  @Get('/list')
+  @ApiOperation({
+    description: "دریافت لیست",
+  
+  })
+  @UsePipes(JoiPipe)
+  async getTempList(@Query() data: tempDto.tempListDto, @Payload() payload: payloadInterface): Promise<{
+    rows: db.Temp[];
+    count: number;
+}>  {
+
+    return await this.TempService.getTempList({data, payload});
+  }
+
+  @Get('/info')
+  @ApiOperation({
+    description: "دریافت اطلاعات",
+  })
+  async tempInfo(@Query('id', ParseIntPipe) id: number, @Payload() payload: payloadInterface): Promise<db.Temp> {
+
+      return await this.TempService.tempInfo({id, payload});
+  }
+
+ 
+  @Post('/add')
+  @ApiOperation({
+    description: "افزودن",
+  })
+  @UsePipes(JoiPipe)
+  async addTemp(@Body() data: tempDto.createTempDto, @Payload() payload: payloadInterface): Promise<insertInterface> {
+
+      return await this.TempService.addTemp({data, payload});
+  }
+
+ 
+  @Put('/update')
+  @ApiOperation({
+    description: "ویرایش",
+  
+  })
+  @UsePipes(JoiPipe)
+  async updateTemp(@Body() data: tempDto.updateTempDto, @Payload() payload: payloadInterface): Promise<number> {
+
+      return await this.TempService.updateTemp({data, payload});
+  }
+
+
+  @Delete('/delete')
+  @ApiOperation({
+    description: "حذف",
+  
+  })
+  @UsePipes(JoiPipe)
+  async deleteTemp(@Body() data: tempDto.deleteTempDto, @Payload() payload: payloadInterface): Promise<number> {
+
+      return await this.TempService.deleteTemp({data, payload})
+  }
+ 
+}

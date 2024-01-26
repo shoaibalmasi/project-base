@@ -1,0 +1,15 @@
+import { Module } from '@nestjs/common';
+import { SequelizeModule } from '@nestjs/sequelize';
+import { UtilsService } from 'src/common/utils/utils';
+import { File, Temp } from 'src/models';
+import { CrudService } from '../crud/crud.service';
+import { TempController } from './temp.controller';
+import { TempService, } from './temp.service';
+
+
+@Module({
+  imports: [SequelizeModule.forFeature([Temp, File])],
+  providers: [TempService, UtilsService, CrudService],
+  controllers: [TempController],
+})
+export class TempModule {}

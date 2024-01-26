@@ -1,0 +1,99 @@
+
+import {
+  HttpException,
+  Injectable,
+} from '@nestjs/common';
+import * as tempDto from 'src/dto/temp.dto';
+import * as _ from 'lodash'
+import * as db from 'src/models/';
+import { UtilsService } from 'src/common/utils/utils';
+import { CrudService } from '../crud/crud.service';
+import { InjectModel } from '@nestjs/sequelize';
+import { payloadInterface } from '../auth/interfaces/auth.inteface';
+
+
+@Injectable()
+export class TempService {
+  constructor(
+    @InjectModel(db.Temp)
+    private tempModel: typeof db.Temp,
+
+    private utilsService: UtilsService,
+    private crudService: CrudService
+  ) {
+     this.crudService.dtoMaker({model: tempModel})
+  }
+
+  async getTempList(input: {data: tempDto.tempListDto, payload: payloadInterface}):Promise<{
+    rows: db.Temp[],
+    count: number
+  }> {
+    const {data, payload} = input
+    let getListQuery = await this.utilsService.getListQueryCreator({
+      data,
+      model: this.tempModel
+    });
+
+    
+    const {where, order, limit, offset} = getListQuery
+    
+    let list = await this.tempModel.findAndCountAll({
+      where,
+      attributes : this.utilsService.getColumnsListByType({
+        model: this.tempModel,
+        omit: ['deletedAt', 'updatedAt','pid']
+      }),
+      order,
+      limit,
+      offset
+    });
+
+    return list;
+  }
+
+  async addTemp(input: {data: tempDto.createTempDto, payload: payloadInterface}): Promise<insertInterface> {
+    const {data, payload} = input
+    let dataObj = this.utilsService.omitNull(data);
+    
+    let temp = await this.tempModel.create(dataObj);
+    return { id: temp.id };
+  }
+
+  async tempInfo(input: {id: number, payload: payloadInterface}): Promise<db.Temp> {
+    let {id, payload} = input
+    let temp = await this.tempModel.findByPk(id, {raw: true});
+    if (!temp) throw new HttpException('یافت نشد',404);
+
+    return temp;
+  }
+
+  async updateTemp(input: {data: tempDto.updateTempDto, payload: payloadInterface}): Promise<number> {
+    const {data , payload} = input
+    const { id } = data;
+
+    let temp = await this.tempModel.findByPk(id, { raw: true });
+    if (!temp) throw new HttpException('شناسه معتبر نیست',404);
+
+    let dataObj = this.utilsService.omitNull(data);
+
+    const result = await this.tempModel.update(dataObj, { where: { id } });
+    if (!result[0]) throw new HttpException('یافت نشد',404);
+
+    return result[0];
+  }
+
+  async deleteTemp(input: {data: tempDto.deleteTempDto, payload: payloadInterface}): Promise<number> {
+   const {data , payload} = input
+
+   //checking
+
+    let result = await this.tempModel.destroy({
+      where: { id: data.id },
+    });
+
+    if (!result) throw new HttpException('یافت نشد',404);
+    return result;
+  }
+
+ 
+}

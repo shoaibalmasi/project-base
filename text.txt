@@ -1,0 +1,6 @@
+to resolve access denied port 8003 ==> 
+net stop winnat
+net start winnat
+
+===========================
+to sync models => after created model just import in one module

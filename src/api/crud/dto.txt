@@ -1,0 +1,68 @@
+import { IsNotEmpty, IsEnum } from "class-validator"
+import { JoiSchema } from "nestjs-joi"
+import * as Joi from 'joi';
+//firstDto
+
+export class tempInfoDto {
+    @JoiSchema(Joi.number().required().description('شناسه'))
+    id: number
+  
+}
+
+export class deleteTempDto {
+    @JoiSchema(Joi.number().required().description('شناسه'))
+    id: number
+}
+
+
+export class createTempDto {
+    @JoiSchema(Joi.string().required().description('نام'))
+    name: string
+
+    @JoiSchema(Joi.string().allow(null,'').description('توضیحات'))
+    description: string    
+   
+} ;
+
+export class tempListDto {
+
+    @JoiSchema(Joi.string().allow(null,'').description('نام'))
+    name: string
+
+    @JoiSchema(Joi.string().allow(null,'').description('توضیحات'))
+    description: string    
+
+    @JoiSchema(Joi.string().allow(null,'').description('جست و جو'))
+    search: string;
+
+    @JoiSchema(Joi.number().allow(null,'').description('شماره صفحه'))
+    pageIndex: number;
+
+    @JoiSchema(Joi.number().allow(null,'').description('اندازه صفحه'))
+    pageSize: number;
+
+    @JoiSchema(Joi.string().allow(null,'').description('مرتب کردن براساس'))
+    sort: string;
+
+    @JoiSchema(Joi.boolean().allow(null,'').description('صعودی/نزولی'))
+    asc: boolean;
+
+    @JoiSchema(Joi.boolean().allow(null, ''))
+    random: boolean;
+
+} 
+
+export class updateTempDto {
+    @JoiSchema(Joi.number().required().description('شناسه'))
+    id: number
+
+    @JoiSchema(Joi.string().allow(null,'').description('نام'))
+    name: string
+
+    @JoiSchema(Joi.string().allow(null,'').description('توضیحات'))
+    description: string    
+   
+}
+
+
+
